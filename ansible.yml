@@ -1,0 +1,28 @@
+
+---
+
+  - hosts: all
+    become: yes
+
+    vars:
+      ansible_version: "2.3.3.0"
+      python_packages:
+        - python-pip
+        - python-devel
+
+    tasks:
+
+      - name: Ensure epel is enabled
+        yum:
+          name: epel-release
+          state: present
+
+      - name: Ensure python packages are installed
+        yum:
+          name: "{{ python_packages }}"
+          state: present
+
+      - name: Ensure ansible is installed
+        pip:
+          name: ansible
+          version: "{{ ansible_version }}"
