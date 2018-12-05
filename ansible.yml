@@ -5,7 +5,6 @@
     become: yes
 
     vars:
-      ansible_version: "2.3.3.0"
       python_packages:
         - python-pip
         - python-devel
@@ -25,4 +24,4 @@
       - name: Ensure ansible is installed
         pip:
           name: ansible
-          version: "{{ ansible_version }}"
+          version: 2.3.3.0
