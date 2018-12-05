@@ -1,6 +1,7 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "CentosBox/Centos7-v7.3-Minimal"
   config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.network "private_network", type: "dhcp"
   # Add 4GB RAM
   config.vm.provider :virtualbox do |vb|
     vb.customize [
