@@ -18,6 +18,16 @@ This is intend to be a run-through of a bunch of Ansible stuff to prepare for th
 
 You can replace roles and vm with your own if desired.
 
+Task on control hosts (ansible)
+================================
+
+1. Create inventory.
+2. ansible.cfg modification.
+3. Install roles.
+4. Create playbooks.
+5. Run playbook to setup system.
+6. Additional tasks.
+
 rhysmeister.nginx - Nginx webserver with php.
 rhysmeister.db    - MySQL role
 rhysmeister.awx   - AWX (Open source version of Ansible Tower role)
