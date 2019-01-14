@@ -25,3 +25,20 @@
         pip:
           name: ansible
           version: 2.3.3.0
+
+      - name: Ensure ansible docs are installed
+        yum:
+          name: ansible-doc-2.4.2.0-2.el7.noarch
+          state: present
+
+      - name: Ensure restview is installed
+        pip:
+          name: restview
+          state: present
+
+      - name: Ensure port is open
+        firewalld:
+          port: 33333/tcp
+          permanent: yes
+          state: enabled
+          immediate: yes
