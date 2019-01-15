@@ -1,0 +1,4 @@
+---
+# handlers file for mariadb
+- name: yum clean
+  command: yum clean all

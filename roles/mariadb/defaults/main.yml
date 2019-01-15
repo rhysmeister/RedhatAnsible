@@ -1,0 +1,12 @@
+---
+# defaults file for mariadb
+mariadb_repo:
+  name: MariaDB
+  description: MariaDB
+  baseurl: http://yum.mariadb.org/10.3/centos7-amd64
+  gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck: yes
+mariadb_packages:
+  - MariaDB
+  - MariaDB-server\
+mariadb_package_state: present

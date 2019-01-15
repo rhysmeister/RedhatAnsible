@@ -1,0 +1,7 @@
+---
+# defaults file for common
+swappiness: 0
+additional_packages:
+  - nettools
+  - wget
+  - xz

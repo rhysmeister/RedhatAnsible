@@ -28,6 +28,7 @@ Task on control hosts (ansible)
 5. Run playbook to setup system.
 6. Additional tasks.
 
-rhysmeister.nginx - Nginx webserver with php.
-rhysmeister.db    - MySQL role
-rhysmeister.awx   - AWX (Open source version of Ansible Tower role)
+rhysmeister.common      - Common Linux stuff.
+rhysmeister.nginx       - Nginx webserver with php.
+rhysmeister.mariadb     - MariaDB role.
+rhysmeister.awx         - AWX (Open source version of Ansible Tower role).

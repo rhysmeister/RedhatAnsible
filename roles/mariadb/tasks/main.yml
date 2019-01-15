@@ -1,0 +1,30 @@
+---
+# tasks file for mariadb
+- name: Ensure mariadb yum repository exists
+  yum_repository:
+    name: "{{ mariadb_repo.name }}"
+    description: "{{ mariadb_repo.description }}"
+    baseurl: "{{ mariadb_repo.baseurl }}"
+    gpgkey: "{{ mariadb_repo.gpgkey }}"
+    gpgcheck: "{{ mariadb_repo.gpgcheck }}"
+  notify: yum clean
+
+- name: Ensure MariaDB packages are installed
+  yum:
+    name: "{{ mariadb_packages }}"
+    state: "{{ mariadb_package_state }}"
+
+# - name: Ensure /etc/my.cnf is up to date
+# - name: Ensure limits are set
+# - name: Ensure mariadb port is open
+
+- name: Ensure the mariadb service is setup
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+
+# - name: Ensure mysql_secure_installation has be run (still needed for 10.3?)
+# - name: Create databases
+# - name: Create users
+# - name: Run custom sql script if provided

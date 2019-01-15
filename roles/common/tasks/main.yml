@@ -1,0 +1,18 @@
+---
+# tasks file for common
+- name: Ensure epel repo is available
+  yum:
+    name: epel-release
+    state: present
+  notify: yum clean
+
+- name: Set swapiness
+  sysctl:
+    name: vm.swappiness
+    value: "{{ swappiness }}"
+    state: present
+
+- name: Ensure additional packages are installed
+  yum:
+    name: "{{ additional_packages }}"
+    state: present

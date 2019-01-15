@@ -1,0 +1,4 @@
+---
+# handlers file for common
+- name: yum clean
+  command: yum clean all
