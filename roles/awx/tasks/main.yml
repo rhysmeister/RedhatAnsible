@@ -1,2 +1,43 @@
 ---
 # tasks file for awx
+- name: Ensure epel is available
+  yum:
+    name: epel-release
+    state: present
+
+- name: Open port for web traffi
+  firewalld:
+    port: 80/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
+
+- name: Disable selinux
+  selinux:
+    state: disabled
+
+- name: Install required packages
+  yum:
+    name: "{{ installation_packages }}"
+    state: latest
+    enablerepo: cr
+
+- name: Start and enable docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Checkout from AWX git
+  git:
+    repo: "{{git_url_awx }}"
+    dest: /home/vagrant/awx
+  become: no
+
+- name: Run ansible playbook for awx setup
+  command: ansible-playbook -i inventory install.yml
+  args:
+    chdir: /home/vagrant/awx/installer/
+
+- debug:
+    msg: "Process will take about ten minutes to complete. You can check the following url for progress http://192.168.4.111 Login with u: admin p: password when ready."

@@ -1,5 +1,10 @@
 ---
 # tasks file for mariadb
+- name: Ensure required packages are installed
+  yum:
+    name: "{{ required_packages }}"
+    state: present
+
 - name: Ensure mariadb yum repository exists
   yum_repository:
     name: "{{ mariadb_repo.name }}"
@@ -15,8 +20,15 @@
     state: "{{ mariadb_package_state }}"
 
 # - name: Ensure /etc/my.cnf is up to date
+
+# See https://bugzilla.redhat.com/show_bug.cgi?id=754285
 # - name: Ensure limits are set
-# - name: Ensure mariadb port is open
+- name: Ensure mariadb port is open
+  firewalld:
+    port: "{{ mariadb_port }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
 
 - name: Ensure the mariadb service is setup
   service:
@@ -25,6 +37,31 @@
     enabled: yes
 
 # - name: Ensure mysql_secure_installation has be run (still needed for 10.3?)
-# - name: Create databases
-# - name: Create users
-# - name: Run custom sql script if provided
+- name: Create databases
+  mysql_db:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - databases
+
+- name: Create read-only users
+  mysql_user:
+    name: "ro_{{ item }}"
+    password: "secret_ro"
+    priv:  "{{ item }}.*:SELECT"
+    state: "present"
+    login_user: "root"
+    login_password: "secret"
+  with_items:
+    - databases
+
+- name: Create read-write users
+  mysql_user:
+    name: "rw_{{ item }}"
+    password: "secret_rw"
+    priv:  "{{ item }}.*:SELECT"
+    state: "present"
+    login_user: "root"
+    login_password: "secret"
+  with_items:
+    - databases

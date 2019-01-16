@@ -1,2 +1,59 @@
 ---
 # tasks file for nginx
+- name: Ensure epel is available
+  yum:
+    name: epel-release
+    state: present
+  notify: yum clean
+
+- name: Ensure nginx is installed
+  yum:
+    name: nginx
+    state: present
+
+- name: ENsure ports are open
+  firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  with_items:
+    - nginx_firewalld_services
+
+- name: Ensure the nginx service is configured
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Ensure php is installed
+  yum:
+    name: "{{ php_packages }}"
+    state: present
+
+- name: PHP config change 1
+  lineinfile:
+    path: /etc/php.ini
+    regexp: "^cgi\.fix_pathinfo=0"
+    line: "cgi.fix_pathinfo=1"
+
+- name: PHP config change 2
+  lineinfile:
+    path: /etc/php-fpm.d/www.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^listen", line: "listen = /var/run/php-fpm/php-fpm.sock" }
+    - { regexp: "^listen\.owner" line: "listen.owner = nobody" }
+    - { regexp: "^listen\.group" line: "listen.group = nobody" }
+    - { regexp: "^user" line: "user = nginx" }
+    - { regexp: "^group" line: "group = nginx" }
+
+- name: Start the php service
+  service:
+    name: php-fpm
+    state: started
+    enabled: yes
+
+# https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-centos-7
+# continue from nginx config template

@@ -1,2 +1,9 @@
 ---
 # defaults file for nginx
+nginx_firewalld_services:
+  - http
+  - https
+php_packages:
+  - php
+  - php-mysql
+  - php-fpm

@@ -10,3 +10,9 @@ mariadb_packages:
   - MariaDB
   - MariaDB-server\
 mariadb_package_state: present
+mariadb_port: 3306/tcp
+required_packages:
+  - PyMySQL
+databases:
+  - mydb1
+  - mydb2

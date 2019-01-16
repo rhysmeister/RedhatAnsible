@@ -1,2 +1,4 @@
 ---
 # handlers file for nginx
+- name: yum clean
+  command: yum clean all
