@@ -55,5 +55,14 @@
     state: started
     enabled: yes
 
-# https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-centos-7
-# continue from nginx config template
+- name: Ensure nginx config is correct
+  template:
+    src: nginx.default.conf
+    dest: /etc/nginx/conf.d/default.conf
+  notify: restart nginx
+
+- name: Ensure php test page exists
+  copy:
+    src: info.php
+    dest: /usr/share/nginx/html/info.php
+    
