@@ -7,12 +7,16 @@ mariadb_repo:
   gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
   gpgcheck: yes
 mariadb_packages:
-  - MariaDB
-  - MariaDB-server\
+  - MariaDB-server
+  - MariaDB-client
+  - MariaDB-common
+  - MariaDB-compat
+  - MariaDB-shared
+  - MariaDB-backup
 mariadb_package_state: present
 mariadb_port: 3306/tcp
 required_packages:
-  - PyMySQL
+  - MySQL-python
 databases:
   - mydb1
   - mydb2

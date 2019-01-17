@@ -42,7 +42,19 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - databases
+    - "{{ databases }}"
+
+- name: Ensure root user exists
+  mysql_user:
+    name: "root"
+    password: "secret"
+    host: "{{ item }}"
+  with_items:
+    - localhost
+    - 127.0.0.1
+    - db1
+    - ::1
+
 
 - name: Create read-only users
   mysql_user:
@@ -53,7 +65,7 @@
     login_user: "root"
     login_password: "secret"
   with_items:
-    - databases
+    - "{{ databases }}"
 
 - name: Create read-write users
   mysql_user:
@@ -64,4 +76,4 @@
     login_user: "root"
     login_password: "secret"
   with_items:
-    - databases
+    - "{{ databases }}"

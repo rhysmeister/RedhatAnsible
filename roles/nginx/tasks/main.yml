@@ -18,7 +18,7 @@
     state: enabled
     immediate: yes
   with_items:
-    - nginx_firewalld_services
+    - "{{ nginx_firewalld_services }}"
 
 - name: Ensure the nginx service is configured
   service:
@@ -34,7 +34,7 @@
 - name: PHP config change 1
   lineinfile:
     path: /etc/php.ini
-    regexp: "^cgi\.fix_pathinfo=0"
+    regexp: '^cgi\.fix_pathinfo=0'
     line: "cgi.fix_pathinfo=1"
 
 - name: PHP config change 2
@@ -44,10 +44,10 @@
     line: "{{ item.line }}"
   with_items:
     - { regexp: "^listen", line: "listen = /var/run/php-fpm/php-fpm.sock" }
-    - { regexp: "^listen\.owner" line: "listen.owner = nobody" }
-    - { regexp: "^listen\.group" line: "listen.group = nobody" }
-    - { regexp: "^user" line: "user = nginx" }
-    - { regexp: "^group" line: "group = nginx" }
+    - { regexp: '^listen\.owner', line: "listen.owner = nobody" }
+    - { regexp: '^listen\.group', line: "listen.group = nobody" }
+    - { regexp: "^user", line: "user = nginx" }
+    - { regexp: "^group", line: "group = nginx" }
 
 - name: Start the php service
   service:
@@ -65,4 +65,3 @@
   copy:
     src: info.php
     dest: /usr/share/nginx/html/info.php
-    
