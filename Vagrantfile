@@ -53,6 +53,7 @@ Vagrant.configure("2") do |config|
               "tower" => ["tower1"]
             }
             ansible.limit = "db"
+            ansible.ask_vault_pass = true
             ansible.playbook = "db.yml"
           end
         end

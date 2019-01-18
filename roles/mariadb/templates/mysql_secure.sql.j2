@@ -1,0 +1,4 @@
+UPDATE mysql.user SET `password` = "{{ super_secret_vault_password }}" WHERE `user` = 'root';
+DROP DATABASE test;
+DELETE FROM mysql.user WHERE `user` = '';
+FLUSH PRIVILEGES;

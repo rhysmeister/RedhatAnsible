@@ -1,5 +1,9 @@
 ---
 # tasks file for mariadb
+- name: Include vars of stuff.yaml into the 'stuff' variable (2.2).
+  include_vars:
+    file: vault.yml
+
 - name: Ensure required packages are installed
   yum:
     name: "{{ required_packages }}"
@@ -44,36 +48,34 @@
   with_items:
     - "{{ databases }}"
 
-- name: Ensure root user exists
-  mysql_user:
-    name: "root"
-    password: "secret"
-    host: "{{ item }}"
-  with_items:
-    - localhost
-    - 127.0.0.1
-    - db1
-    - ::1
+- name: Copy mysql secure install script to host
+  template:
+    src: mysql_secure.sql.j2
+    dest: /home/vagrant/mysql_secure.sql
 
+- name: Ensure mysql_secure_installation isntance has been secured
+  shell: mysql -u root < /home/vagrant/mysql_secure.sql && touch mysql_secure.success
+  args:
+    creates: mysql_secure.success
 
 - name: Create read-only users
   mysql_user:
     name: "ro_{{ item }}"
-    password: "secret_ro"
+    password: "{{ secret_ro }}"
     priv:  "{{ item }}.*:SELECT"
     state: "present"
     login_user: "root"
-    login_password: "secret"
+    login_password: "{{ super_secret_vault_password }}"
   with_items:
     - "{{ databases }}"
 
 - name: Create read-write users
   mysql_user:
     name: "rw_{{ item }}"
-    password: "secret_rw"
+    password: "{{ secret_rw }}"
     priv:  "{{ item }}.*:SELECT"
     state: "present"
     login_user: "root"
-    login_password: "secret"
+    login_password: "{{ super_secret_vault_password }}"
   with_items:
     - "{{ databases }}"
