@@ -1,13 +1,13 @@
 ---
 # defaults file for awx
 installation_packages:
-  - "git",
-  - "gettext",
-  - "ansible",
-  - "docker",
-  - "nodejs",
-  - "npm",
-  - "gcc-c++",
-  - "bzip2",
+  - "git"
+  - "gettext"
+  - "ansible"
+  - "docker"
+  - "nodejs"
+  - "npm"
+  - "gcc-c++"
+  - "bzip2"
   - "python-docker-py"
 git_url_awx: "https://github.com/ansible/awx.git"
