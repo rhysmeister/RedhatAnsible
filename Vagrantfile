@@ -6,11 +6,12 @@ Vagrant.configure("2") do |config|
     "db1",
     "db2",
     "tower1"].each do |host|
-      config.vm.synced_folder ".", "/vagrant", disabled: true
-      config.vm.network "private_network", ip: "192.168.44.#{100 + inc}"
-      inc+=1
+
       config.vm.define "#{host}" do |v|
         v.vm.box = "CentosBox/Centos7-v7.3-Minimal"
+        v.vm.synced_folder ".", "/vagrant", disabled: true
+        v.vm.network "private_network", ip: "192.168.44.#{100 + inc}"
+        inc+=1
         v.vm.provider :virtualbox do |vb|
           vb.customize [
             "modifyvm", :id,
@@ -20,7 +21,7 @@ Vagrant.configure("2") do |config|
           vb.cpus = 1
         end
         config.vm.hostname = "#{host}"
-        if host == "ansible"
+        if host.eql? "ansible1"
           config.vm.provision :ansible do |ansible|
             ansible.groups = {
                 "ansible" => ["ansible1"],
@@ -32,7 +33,7 @@ Vagrant.configure("2") do |config|
             ansible.playbook = "ansible.yml"
           end
         end
-        if host.start_with?("web")
+        if host.eql? "web2"
           config.vm.provision :ansible do |ansible|
             ansible.groups = {
               "ansible" => ["ansible1"],
@@ -44,7 +45,7 @@ Vagrant.configure("2") do |config|
             ansible.playbook = "web.yml"
           end
         end
-        if host.start_with?("db")
+        if host.eql? "db2"
           config.vm.provision :ansible do |ansible|
             ansible.groups = {
               "ansible" => ["ansible1"],
@@ -57,7 +58,8 @@ Vagrant.configure("2") do |config|
             ansible.playbook = "db.yml"
           end
         end
-        if host == "tower"
+        if host.eql? "tower1"
+          config.vm.network "forwarded_port", guest: 80, host: 8080
           config.vm.provision :ansible do |ansible|
             ansible.groups = {
               "ansible" => ["ansible1"],
@@ -66,6 +68,7 @@ Vagrant.configure("2") do |config|
               "tower" => ["tower1"]
             }
             ansible.limit = "tower"
+            ansible.ask_vault_pass = false
             ansible.playbook = "tower.yml"
           end
         end
