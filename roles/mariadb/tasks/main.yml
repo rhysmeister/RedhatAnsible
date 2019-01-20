@@ -40,23 +40,26 @@
     state: started
     enabled: yes
 
-# - name: Ensure mysql_secure_installation has be run (still needed for 10.3?)
-- name: Create databases
-  mysql_db:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - "{{ databases }}"
-
 - name: Copy mysql secure install script to host
   template:
     src: mysql_secure.sql.j2
     dest: /home/vagrant/mysql_secure.sql
 
-- name: Ensure mysql_secure_installation isntance has been secured
-  shell: mysql -u root < /home/vagrant/mysql_secure.sql && touch mysql_secure.success
+- name: Ensure mysql_secure_installation instance has been secured
+  shell: mysql -u root --port {{ mariadb_port | replace('/tcp', '') }} < /home/vagrant/mysql_secure.sql && touch mysql_secure.success
   args:
     creates: mysql_secure.success
+
+# - name: Ensure mysql_secure_installation has be run (still needed for 10.3?)
+- name: Create databases
+  mysql_db:
+    name: "{{ item }}"
+    state: present
+    login_user: "root"
+    login_password: "{{ super_secret_vault_password }}"
+    login_port: "{{ mariadb_port | replace('/tcp', '') }}"
+  with_items:
+    - "{{ databases }}"
 
 - name: Create read-only users
   mysql_user:
@@ -66,6 +69,7 @@
     state: "present"
     login_user: "root"
     login_password: "{{ super_secret_vault_password }}"
+    login_port: "{{ mariadb_port | replace('/tcp', '') }}"
   with_items:
     - "{{ databases }}"
 
@@ -77,5 +81,6 @@
     state: "present"
     login_user: "root"
     login_password: "{{ super_secret_vault_password }}"
+    login_port: "{{ mariadb_port | replace('/tcp', '') }}"
   with_items:
     - "{{ databases }}"

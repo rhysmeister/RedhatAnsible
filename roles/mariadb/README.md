@@ -1,38 +1,25 @@
 Role Name
 =========
 
-A brief description of the role goes here.
-
-Requirements
-------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+A basic MariaDB setup.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+mariadb_repo: Dictionary for MariaDB yum repo.
+mariadb_packages: MariaDB packages to install.
+mariadb_package_state: Installation state of MariaDB packages.
+mariadb_port: Port for MariaDB in format NNNN/tcp
+required_packages: Additional packages required for the role.
+databases: MariaDB databases to create.
 
-Dependencies
-------------
+These variables are stored using ansible-vault.
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
+super_secret_vault_password: MariaDB root password
+secret_ro: MariaDB user read-only password
+secret_rw:  MariaDB user read-write password
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Rhys Campbell <rhys.james.campbell@googlemail.com> http://github.com/rhysmeister
